@@ -4,11 +4,10 @@ namespace F3Migration;
 
 class MigrationController extends \Prefab
 {
-    protected
-        $setting;
+    protected array $setting;
 
-    protected
-        $stats = [];
+    protected array $stats = [];
+    public \Base $f3;
 
     public function __construct() {
         $this->load_setting();
@@ -50,7 +49,7 @@ class MigrationController extends \Prefab
      * Triggers migration and much more.
      * NOT RECOMENDED FOR PUBLIC USE. PLEASE USE Boot::trigger_on().
      *
-     * @return Array quick stats
+     * @return array quick stats
      */
     public function do_migrate() {
         $this->load_setting();
@@ -182,7 +181,7 @@ class MigrationController extends \Prefab
     /**
      * Get last migration stats.
      *
-     * @return Array quick stats
+     * @return array quick stats
      */
     public function get_stats() {
         return $this->stats;
