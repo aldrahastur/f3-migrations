@@ -1,10 +1,20 @@
 <?php
 Namespace F3Migration;
 
+use DB\SQL\Schema;
+
 /**
  * Migration Packet base class.
  */
 abstract class MigrationCase {
+
+
+    public Schema $schema;
+
+    public function __construct()
+    {
+        $this->schema = new Schema(DatabaseConnector::getDatabaseConnection('mysql', 'localhost', '3306', 'sales', 'sales', 'sales'));
+    }
 
     /**
      * Migration worker function.

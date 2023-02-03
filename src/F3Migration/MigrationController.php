@@ -2,18 +2,21 @@
 
 namespace F3Migration;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 class MigrationController extends \Prefab
 {
     protected array $setting;
 
     protected array $stats = [];
+
     public \Base $f3;
 
     public function __construct() {
+        $this->f3 =  \Base::instance();
         $this->load_setting();
         $this->initRoutes();
-
-        $this->f3 =  \Base::instance();
     }
 
     /**
@@ -23,11 +26,11 @@ class MigrationController extends \Prefab
         $setting = [];
 
         $file = dirname(__DIR__) . "/data/log.log";
-        $logger = new \Log('migration'.date('Y-m-d').'.log');
+        $logger = new Logger('migration-'.date('Y-m-d').'.log');
         // Default setting
         $this->setting = array_merge([
             "info" => dirname(__DIR__) . "/data/migration.json",
-            "path" => "database/migrations",
+            "path" => "database/migrations/",
             "prefix" => "Migration\\",
             "show_log" => true,
             "access_path" => "GET @ilgar: /ilgar/migrate",
@@ -43,6 +46,8 @@ class MigrationController extends \Prefab
 
             $file = "php://output";
         }
+
+        $logger->pushHandler(new StreamHandler($file, Logger::INFO));
     }
 
     /**
@@ -57,17 +62,21 @@ class MigrationController extends \Prefab
         $log = $this->setting['logger'];
 
         $log->notice("Migration Started");
+        $migration_packages = scandir($path);
 
-        $migration_packages=scandir($path);
+
+        
         $points = array_splice($migration_packages, 2);
         natcasesort($points);
 
         $prefix = $this->setting['prefix'];
 
+        var_dump($prefix);
+
         $points = array_map(function($file) use ($path, $prefix, &$log){
             $fname = basename($file);
             $log->info('Proccessing ' . $file);
-            if(!is_file($path . $file)){
+            if(!is_file(realpath($path . $file))){
                 $log->info('Current file was not a file.');
                 return null;
             }

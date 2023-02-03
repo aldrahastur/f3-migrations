@@ -7,26 +7,12 @@ use DB\SQL;
 class DatabaseConnector
 {
 
-
-    private $f3;
-
-    public function __construct()
+    static function getDatabaseConnection($driver, $server = null, $port = null, $dbname = null, $user = null, $password = null): string|SQL
     {
-        $this->f3 =  \Base::instance();
-    }
-
-    public function getDatabaseConnection($driver, $server = null, $port = null, $user = null, $password = null)
-    {
-        switch ($driver) {
-            case 'sqlite':
-                $db = new SQL('sqlite:database/database.sqlite');
-                break;
-            default :
-
-                $db = 'no driver specified';
-                break;
-        }
-
-        return $db;
+        return match ($driver) {
+            'mysql' => new SQL('mysql:host=' . $server . ';port=' . $port . ';dbname=' . $dbname, $user, $password),
+            'sqlite' => new SQL('sqlite:database/database.sqlite'),
+            default => 'no driver specified',
+        };
     }
 }
