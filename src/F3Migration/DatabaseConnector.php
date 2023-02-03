@@ -12,15 +12,14 @@ class DatabaseConnector
 
     public function __construct()
     {
-        $this->f3 =  Base::instance();
+        $this->f3 =  \Base::instance();
     }
 
     public function getDatabaseConnection($driver, $server = null, $port = null, $user = null, $password = null)
     {
         switch ($driver) {
             case 'sqlite':
-               $sqlPath = $this->f3->get('BASE').'/database/database.sqlite';
-                $db = new SQL('sqlite:'.$sqlPath);
+                $db = new SQL('sqlite:database/database.sqlite');
                 break;
             default :
 

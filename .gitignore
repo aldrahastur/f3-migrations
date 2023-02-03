@@ -1,5 +1,5 @@
 composer.lock
 vendor*
-database*
+database/*
 .idea/*
 .env
