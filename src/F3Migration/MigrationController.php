@@ -2,7 +2,7 @@
 
 namespace F3Migration;
 
-class MIgrationController extends \Prefab
+class MigrationController extends \Prefab
 {
     protected
         $setting;
@@ -13,17 +13,18 @@ class MIgrationController extends \Prefab
     public function __construct() {
         $this->load_setting();
         $this->initRoutes();
+
+        $this->f3 =  \Base::instance();
     }
 
     /**
      * Get and set the settings option.
      */
     private function load_setting() {
-        $f3 = \Base::instance();
-        $setting = $f3->get('ILGAR');
+        $setting = [];
 
         $file = dirname(__DIR__) . "/data/log.log";
-        $logger = new Logger('migration');
+        $logger = new \Log('migration'.date('Y-m-d').'.log');
         // Default setting
         $this->setting = array_merge([
             "info" => dirname(__DIR__) . "/data/migration.json",
@@ -34,7 +35,7 @@ class MIgrationController extends \Prefab
             "logger" => $logger,
             "no_exception" => false
         ], $setting);
-        $f3->set('ILGAR', $this->setting);
+        $this->f3->set('ILGAR', $this->setting);
 
         if($this->setting['show_log']) {
             if(!(php_sapi_name() === 'cli')) {
@@ -43,9 +44,8 @@ class MIgrationController extends \Prefab
 
             $file = "php://output";
         }
-        $logger->pushHandler(new StreamHandler($file, Logger::INFO));
     }
-    
+
     /**
      * Triggers migration and much more.
      * NOT RECOMENDED FOR PUBLIC USE. PLEASE USE Boot::trigger_on().
