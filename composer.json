@@ -1,0 +1,22 @@
+{
+  "name": "aldrahastur/f3-migrations",
+  "description": "migrations for f3 sql mapper",
+  "type": "libary",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Willi Helwig",
+      "email": "willi.helwig@tivents.de"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=8.1",
+    "ikkez/f3-schema-builder": "dev-master"
+  },
+  "autoload": {
+    "psr-0": {
+      "F3Migration": "src/"
+    }
+  }
+}
